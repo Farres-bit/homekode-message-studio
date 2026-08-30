@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>HomeKode Marketing Command Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+
+<style>
+:root{
+  --bg:#F4F1EC; --panel:#FFFFFF; --panel-2:#FBF9F6; --line:#E3DDD3; --line-soft:#EFEAE2;
+  --ink:#1F1C17; --ink-2:#4A443B; --muted:#7C7466;
+  --accent:#A9542F; --accent-soft:#F2E4DC; --accent-ink:#8E4526;
+  --ok:#2E7355; --ok-soft:#E2EFE9;
+  --warn:#9A6B12; --warn-soft:#F6ECD8;
+  --crit:#A83A32; --crit-soft:#F7E3E1;
+  --ig:#B8336A; --ig-soft:#F6E3EC;
+  --web:#33506E; --web-soft:#E4EAF1;
+  --shadow:0 1px 2px rgba(31,28,23,.05),0 8px 24px -12px rgba(31,28,23,.18);
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141210; --panel:#1D1A16; --panel-2:#232019; --line:#332E27; --line-soft:#2A251F;
+    --ink:#F1ECE3; --ink-2:#CFC7BA; --muted:#968C7C;
+    --accent:#D8865E; --accent-soft:#3A2820; --accent-ink:#E8A483;
+    --ok:#5FB68F; --ok-soft:#1C302A;
+    --warn:#D6A64A; --warn-soft:#332A18;
+    --crit:#DE7C72; --crit-soft:#361F1D;
+    --ig:#E48CB4; --ig-soft:#331924;
+    --web:#8FB2D6; --web-soft:#1B2632;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141210; --panel:#1D1A16; --panel-2:#232019; --line:#332E27; --line-soft:#2A251F;
+  --ink:#F1ECE3; --ink-2:#CFC7BA; --muted:#968C7C;
+  --accent:#D8865E; --accent-soft:#3A2820; --accent-ink:#E8A483;
+  --ok:#5FB68F; --ok-soft:#1C302A;
+  --warn:#D6A64A; --warn-soft:#332A18;
+  --crit:#DE7C72; --crit-soft:#361F1D;
+  --ig:#E48CB4; --ig-soft:#331924;
+  --web:#8FB2D6; --web-soft:#1B2632;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -14px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Archivo,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace}
+.lbl{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+.shell{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+.rail{border-right:1px solid var(--line);background:var(--panel);display:flex;flex-direction:column;gap:20px;padding:22px 16px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand{display:flex;flex-direction:column;gap:3px;padding:0 6px}
+.brand b{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;font-size:20px;letter-spacing:.16em;line-height:1}
+.brand span{font-size:11px;color:var(--muted)}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;cursor:pointer;background:none;border:0;border-radius:8px;padding:9px 10px;color:var(--ink-2);font:inherit;font-size:14px;font-weight:500}
+.nav button:hover{background:var(--panel-2);color:var(--ink)}
+.nav button[aria-current="true"]{background:var(--accent-soft);color:var(--accent-ink);font-weight:600}
+.nav button:focus-visible,.tog:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.railfoot{margin-top:auto;display:flex;flex-direction:column;gap:10px;padding:0 6px}
+.tog{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:7px 10px;font:inherit;font-size:12px;color:var(--ink-2);cursor:pointer}
+.chan{display:flex;flex-direction:column;gap:6px;padding:10px;background:var(--panel-2);border:1px solid var(--line-soft);border-radius:8px;font-size:12px}
+.chan a{display:flex;align-items:center;gap:7px;color:var(--ink-2);text-decoration:none}
+.chan a:hover{color:var(--accent-ink)}
+
+.main{padding:30px 34px 70px;max-width:1220px}
+.head{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;justify-content:space-between;margin-bottom:24px}
+h1.page{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:38px;line-height:1.08;margin:6px 0 4px;text-wrap:balance;letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:14px;max-width:64ch;margin:0}
+.view{display:none}
+.view.on{display:block;animation:fade .22s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.view.on{animation:none}}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.pad{padding:18px}
+.grid{display:grid;gap:14px}
+.g4{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+@media (max-width:1000px){.shell{grid-template-columns:1fr}.rail{position:static;height:auto}.main{padding:22px 18px 60px}}
+.stat{display:flex;flex-direction:column;gap:5px}
+.stat b{font-family:"Cormorant Garamond",Georgia,serif;font-size:30px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
+.stat .delta{font-size:12px;font-weight:600}
+.up{color:var(--ok)}.down{color:var(--crit)}
+.chip{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:3px 9px;font-size:11px;font-weight:600;letter-spacing:.02em;white-space:nowrap}
+.c-ig{background:var(--ig-soft);color:var(--ig)}
+.c-web{background:var(--web-soft);color:var(--web)}
+.c-ok{background:var(--ok-soft);color:var(--ok)}
+.c-warn{background:var(--warn-soft);color:var(--warn)}
+.c-crit{background:var(--crit-soft);color:var(--crit)}
+.c-accent{background:var(--accent-soft);color:var(--accent-ink)}
+.c-muted{background:var(--panel-2);color:var(--muted);border:1px solid var(--line-soft)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:0 10px 8px;border-bottom:1px solid var(--line)}
+td{padding:10px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+tr:last-child td{border-bottom:0}
+.scroll{overflow-x:auto}
+.note{border-left:3px solid var(--accent);background:var(--panel-2);padding:12px 14px;font-size:13px;line-height:1.65;border-radius:0 8px 8px 0}
+ul.tight{margin:8px 0 0;padding-left:18px;line-height:1.85;font-size:13.5px}
+.barwrap{display:flex;align-items:flex-end;gap:8px;height:120px;padding-top:8px}
+.bar{flex:1;background:linear-gradient(180deg,var(--accent),var(--accent-soft));border-radius:5px 5px 0 0;min-height:6px;position:relative}
+.bar span{position:absolute;top:-18px;left:0;right:0;text-align:center;font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}
+.bar em{position:absolute;bottom:-20px;left:0;right:0;text-align:center;font-size:10px;color:var(--muted);font-style:normal}
+
+/* pipeline */
+.pipe{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px}
+.pcol{flex:0 0 200px;background:var(--panel-2);border:1px solid var(--line-soft);border-radius:10px;padding:10px}
+.pcol h4{margin:0 0 8px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between}
+.deal{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px;margin-bottom:8px;font-size:12.5px}
+.deal:last-child{margin-bottom:0}
+.deal b{font-size:13px}
+.deal .h{color:var(--ig);font-family:"JetBrains Mono",monospace;font-size:11px}
+.deal .m{color:var(--muted);font-size:11.5px;margin-top:3px}
+
+/* IG grid */
+.iggrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:360px}
+.igcell{aspect-ratio:1;border-radius:6px;display:flex;flex-direction:column;justify-content:flex-end;padding:8px;color:#fff;font-size:11px;font-weight:600;line-height:1.25;position:relative;overflow:hidden}
+.igcell .k{position:absolute;top:6px;right:7px;font-size:13px}
+.cal{display:flex;flex-direction:column;gap:0}
+.calrow{display:grid;grid-template-columns:120px 1fr;gap:12px;padding:11px 0;border-bottom:1px solid var(--line-soft)}
+.calrow:last-child{border-bottom:0}
+.calrow .mo{font-family:"Cormorant Garamond",serif;font-size:16px;font-weight:600}
+.camp{display:inline-block;background:var(--panel-2);border:1px solid var(--line-soft);border-radius:7px;padding:5px 10px;margin:0 6px 6px 0;font-size:12.5px}
+.appr{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line-soft)}
+.appr:last-child{border-bottom:0}
+.appr .ic{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;background:var(--panel-2);border:1px solid var(--line)}
+.btn{border:0;border-radius:7px;padding:7px 12px;font:inherit;font-size:12px;font-weight:600;cursor:pointer}
+.btn-ok{background:var(--accent);color:#fff}
+.btn-gh{background:var(--panel-2);border:1px solid var(--line);color:var(--ink-2)}
+.sw{display:flex;gap:12px;flex-wrap:wrap}
+.swatch{width:130px}
+.swatch .box{height:64px;border-radius:8px;border:1px solid var(--line-soft)}
+.swatch .n{font-size:12px;margin-top:6px;font-weight:600}
+.swatch .h{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--muted)}
+.type-row{display:flex;align-items:baseline;gap:14px;padding:8px 0;border-bottom:1px solid var(--line-soft)}
+.type-row:last-child{border-bottom:0}
+.feed .ev{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line-soft)}
+.feed .ev:last-child{border-bottom:0}
+.feed .ic{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;background:var(--panel-2);border:1px solid var(--line)}
+.feed .t{font-weight:600;font-size:13.5px}
+.feed .d{font-size:12px;color:var(--muted)}
+.team{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.member{background:var(--panel-2);border:1px solid var(--line-soft);border-radius:10px;padding:14px}
+.member .role{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink);font-weight:600}
+.member .who{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:600;margin:2px 0 8px}
+.member ul{margin:0;padding-left:16px;font-size:12.5px;line-height:1.7;color:var(--ink-2)}
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="rail">
+    <div class="brand"><b>HOME&nbsp;KODE</b><span>Marketing Command Center</span></div>
+    <nav class="nav" id="nav">
+      <button data-v="overview" aria-current="true">🎯 CMO Overview</button>
+      <button data-v="influencers">🤝 Influencers &amp; Partnerships</button>
+      <button data-v="instagram">📸 Instagram Planner</button>
+      <button data-v="calendar">🗓️ Marketing Calendar</button>
+      <button data-v="approvals">✅ Approvals Inbox</button>
+      <button data-v="performance">📊 Performance</button>
+      <button data-v="merch">🛋️ Merchandising</button>
+      <button data-v="brand">🎨 Brand Kit</button>
+    </nav>
+    <div class="railfoot">
+      <div class="chan">
+        <div class="lbl" style="margin-bottom:2px">Our channels</div>
+        <a href="https://www.instagram.com/homekode/" target="_blank" rel="noopener">📸 @homekode</a>
+        <a href="https://homekode.com/" target="_blank" rel="noopener">🌐 homekode.com</a>
+      </div>
+      <button class="tog" id="tog">◐ Switch theme</button>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- OVERVIEW -->
+    <section class="view on" id="v-overview">
+      <div class="head"><div>
+        <div class="lbl">Good morning</div>
+        <h1 class="page">Your week, at a glance.</h1>
+        <p class="sub">Everything the brand, catalogue, design and marketing team is moving this week — and the few decisions that are waiting on you. 🕊️</p>
+      </div></div>
+
+      <div class="grid g4" style="margin-bottom:18px">
+        <div class="card pad stat"><span class="lbl">📸 Instagram followers</span><b>48.6K</b><span class="delta up">▲ 1,240 this week</span></div>
+        <div class="card pad stat"><span class="lbl">🤝 Active influencer deals</span><b>7</b><span class="delta">3 live · 2 negotiating</span></div>
+        <div class="card pad stat"><span class="lbl">✅ Waiting on your approval</span><b>4</b><span class="delta down">2 due today</span></div>
+        <div class="card pad stat"><span class="lbl">🌐 Website sessions (7d)</span><b>18.3K</b><span class="delta up">▲ 9%</span></div>
+      </div>
+
+      <div class="grid g2" style="margin-bottom:18px">
+        <div class="card pad">
+          <div class="lbl">Needs a decision from you</div>
+          <ul class="tight">
+            <li>✅ <b>Eid teaser reel</b> — Graphic Designer, due today. <span class="chip c-warn">Approval</span></li>
+            <li>🤝 <b>@lodging.dxb collab brief</b> — 62K followers, AED 3,500 quote to approve.</li>
+            <li>🗓️ <b>White Friday plan</b> — budget sign-off before media booking.</li>
+            <li>🛋️ <b>Evalina Sofa</b> back in stock — feature on grid this week?</li>
+          </ul>
+        </div>
+        <div class="card pad">
+          <div class="lbl">This week's campaign</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;margin:6px 0 2px">Eid Al Adha · "A home to gather in"</div>
+          <p class="sub" style="font-size:13px">Live Wed–Sun across Instagram + homepage hero. 3 influencer posts, 1 reel, 5 grid posts, homepage banner.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+            <span class="chip c-ig">📸 8 posts scheduled</span>
+            <span class="chip c-web">🌐 Homepage hero live</span>
+            <span class="chip c-accent">🤝 3 influencers briefed</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card pad">
+        <div class="lbl" style="margin-bottom:12px">Your team this week</div>
+        <div class="team" id="teamgrid"></div>
+      </div>
+    </section>
+
+    <!-- INFLUENCERS -->
+    <section class="view" id="v-influencers">
+      <div class="head"><div>
+        <div class="lbl">Brand &amp; Partnerships</div>
+        <h1 class="page">Influencers &amp; partnerships</h1>
+        <p class="sub">Every deal from first DM to paid, in one pipeline — with the promo code, the tracking link and the results, so you always know what a partnership actually returned. 🤝</p>
+      </div></div>
+      <div class="grid g4" style="margin-bottom:18px">
+        <div class="card pad stat"><span class="lbl">Reach this month</span><b>412K</b><span class="delta up">across 5 creators</span></div>
+        <div class="card pad stat"><span class="lbl">Sales via codes</span><b>AED 38,900</b><span class="delta up">▲ vs last month</span></div>
+        <div class="card pad stat"><span class="lbl">Avg. engagement</span><b>4.8%</b><span class="delta">home &amp; lifestyle niche</span></div>
+        <div class="card pad stat"><span class="lbl">Cost per order</span><b>AED 71</b><span class="delta">blended, code-attributed</span></div>
+      </div>
+      <div class="card pad" style="margin-bottom:18px">
+        <div class="lbl" style="margin-bottom:12px">Deal pipeline</div>
+        <div class="pipe" id="pipe"></div>
+      </div>
+      <div class="card pad scroll">
+        <div class="lbl" style="margin-bottom:10px">Live &amp; recent partnerships</div>
+        <div id="inftable"></div>
+      </div>
+    </section>
+
+    <!-- INSTAGRAM -->
+    <section class="view" id="v-instagram">
+      <div class="head"><div>
+        <div class="lbl">@homekode</div>
+        <h1 class="page">Instagram planner</h1>
+        <p class="sub">Plan the grid before it goes live — see how the next nine posts sit together, with captions, hashtags and status for each. 📸</p>
+      </div></div>
+      <div class="grid g2">
+        <div class="card pad">
+          <div class="lbl" style="margin-bottom:12px">Grid preview — next 9</div>
+          <div class="iggrid" id="iggrid"></div>
+          <p class="sub" style="font-size:12px;margin-top:12px">Tap-worthy alternation: hero product · lifestyle room · UGC/influencer · repeat. Keeps the feed feeling curated, not catalogue.</p>
+        </div>
+        <div class="card pad scroll">
+          <div class="lbl" style="margin-bottom:10px">Content queue</div>
+          <div id="igqueue"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CALENDAR -->
+    <section class="view" id="v-calendar">
+      <div class="head"><div>
+        <div class="lbl">Always-on planning</div>
+        <h1 class="page">Marketing calendar</h1>
+        <p class="sub">The year's commercial moments mapped to the UAE calendar, so nothing is planned late — and the team can see what's coming. 🗓️</p>
+      </div></div>
+      <div class="card pad"><div class="cal" id="calbody"></div></div>
+    </section>
+
+    <!-- APPROVALS -->
+    <section class="view" id="v-approvals">
+      <div class="head"><div>
+        <div class="lbl">Sign-off</div>
+        <h1 class="page">Approvals inbox</h1>
+        <p class="sub">Everything the team has submitted for your eye, in one queue. Approve, or send it back with a note. ✅</p>
+      </div></div>
+      <div class="card pad"><div id="apprbody"></div></div>
+    </section>
+
+    <!-- PERFORMANCE -->
+    <section class="view" id="v-performance">
+      <div class="head"><div>
+        <div class="lbl">What's working</div>
+        <h1 class="page">Performance</h1>
+        <p class="sub">Instagram, the website and sales in one view. 📊</p>
+      </div></div>
+      <div class="card pad" style="margin-bottom:18px;border-left:3px solid var(--warn)">
+        <div class="lbl" style="color:var(--warn)">⚡ Live data needs three connectors</div>
+        <p class="sub" style="margin-top:6px;font-size:13px">The numbers below are a working sample. To make them <b>live and automatic</b>, this page connects to <b>Meta / Instagram Insights</b>, <b>Google Analytics</b> and <b>Shopify</b> — the same kind of secure connection used on the message side. Until then, the cards double as a clean manual-entry scorecard. 🔌</p>
+      </div>
+      <div class="grid g4" style="margin-bottom:18px">
+        <div class="card pad stat"><span class="lbl">📸 Followers</span><b>48.6K</b><span class="delta up">▲ 2.6% / mo</span></div>
+        <div class="card pad stat"><span class="lbl">📸 Engagement rate</span><b>4.8%</b><span class="delta up">▲ 0.4pt</span></div>
+        <div class="card pad stat"><span class="lbl">🌐 Sessions / mo</span><b>74.1K</b><span class="delta up">▲ 9%</span></div>
+        <div class="card pad stat"><span class="lbl">🛒 Orders / mo</span><b>612</b><span class="delta up">▲ 14%</span></div>
+      </div>
+      <div class="grid g2">
+        <div class="card pad">
+          <div class="lbl" style="margin-bottom:6px">Revenue by channel — last 6 months (AED 000s)</div>
+          <div class="barwrap" id="revbars"></div>
+        </div>
+        <div class="card pad">
+          <div class="lbl" style="margin-bottom:10px">Top performers this month</div>
+          <ul class="tight">
+            <li>🥇 <b>Evalina Mulberry Sofa Chair</b> — most-saved post, 38 orders</li>
+            <li>📸 <b>@lodging.dxb reel</b> — 96K views, code LODGING10</li>
+            <li>🌐 <b>Marble &amp; Stone collection</b> — top landing page</li>
+            <li>🔥 <b>Terracotta Bench</b> — highest add-to-cart rate</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- MERCHANDISING -->
+    <section class="view" id="v-merch">
+      <div class="head"><div>
+        <div class="lbl">Reuses the live website feed</div>
+        <h1 class="page">Merchandising</h1>
+        <p class="sub">What changed on homekode.com — so the catalogue and marketing teams know what to feature, and what to quietly pull from ads. 🛋️</p>
+      </div></div>
+      <div class="grid g2">
+        <div class="card pad">
+          <div class="lbl" style="margin-bottom:6px">Live store changes</div>
+          <div class="feed" id="merchfeed"></div>
+        </div>
+        <div class="card pad">
+          <div class="lbl">Feature / pull rules of thumb</div>
+          <ul class="tight">
+            <li>🆕 <b>New arrival</b> → grid post + "New In" story within 48h.</li>
+            <li>✅ <b>Back in stock</b> → re-run the reel that sold it out.</li>
+            <li>⛔ <b>Sold out</b> → pause any live ad pointing to it (don't pay for dead traffic).</li>
+            <li>🔻 <b>Price drop</b> → a "now AED X" story is your highest-converting format.</li>
+            <li>📦 <b>Collection updated</b> → refresh the homepage hero + a carousel.</li>
+          </ul>
+          <div class="note" style="margin-top:14px">This feed is powered by the same poller built for the message platform — one source of truth for "what's live on the site right now." ✅</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BRAND KIT -->
+    <section class="view" id="v-brand">
+      <div class="head"><div>
+        <div class="lbl">One reference for the whole team</div>
+        <h1 class="page">Brand kit</h1>
+        <p class="sub">The look, the type and the voice — so every post, banner and lookbook feels unmistakably HomeKode. 🎨</p>
+      </div></div>
+      <div class="grid g2" style="margin-bottom:18px">
+        <div class="card pad">
+          <div class="lbl" style="margin-bottom:12px">Palette</div>
+          <div class="sw" id="swatches"></div>
+        </div>
+        <div class="card pad">
+          <div class="lbl" style="margin-bottom:8px">Typography</div>
+          <div class="type-row"><span style="font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600">Aa</span><div><div style="font-weight:600">Cormorant Garamond</div><div class="sub" style="font-size:12px">Headlines, product names — warm, editorial</div></div></div>
+          <div class="type-row"><span style="font-family:Archivo,sans-serif;font-size:24px;font-weight:600">Aa</span><div><div style="font-weight:600">Archivo</div><div class="sub" style="font-size:12px">Body, captions, UI — clean and modern</div></div></div>
+          <div class="type-row"><span class="mono" style="font-size:20px">Aa</span><div><div style="font-weight:600">JetBrains Mono</div><div class="sub" style="font-size:12px">Codes, prices, labels — precise</div></div></div>
+        </div>
+      </div>
+      <div class="grid g2">
+        <div class="card pad">
+          <div class="lbl">Tone of voice</div>
+          <ul class="tight">
+            <li>Warm, calm, confident — like a friend with great taste.</li>
+            <li>Speak to the <b>home</b>, not the product spec. "A home to gather in," not "3-seater sofa."</li>
+            <li>Short sentences. Real feelings. No hype, no exclamation storms.</li>
+            <li>Respectful and inclusive for a multi-national UAE audience.</li>
+          </ul>
+        </div>
+        <div class="card pad">
+          <div class="lbl">Do &amp; don't</div>
+          <ul class="tight">
+            <li>✅ Let the product breathe — generous space, natural light.</li>
+            <li>✅ Style in real rooms, real moments.</li>
+            <li>⛔ No cluttered collages or hard-sell price stickers on hero posts.</li>
+            <li>⛔ Don't stretch or recolor the wordmark.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+<script src="/marketing/app.js" defer></script>
+</body>
+</html>
