@@ -1,0 +1,16 @@
+{
+  "name": "homekode-message-studio",
+  "version": "0.3.0",
+  "private": true,
+  "type": "module",
+  "description": "HomeKode post-action email & WhatsApp framework \u2014 Cloudflare + GitHub, no Supabase",
+  "devDependencies": {
+    "wrangler": "^3.78.0"
+  },
+  "scripts": {
+    "d1:create": "wrangler d1 create homekode_studio",
+    "d1:schema": "wrangler d1 execute homekode_studio --file db/schema.d1.sql --remote",
+    "deploy": "wrangler pages deploy public --project-name homekode-message-studio",
+    "poll:deploy": "wrangler deploy"
+  }
+}

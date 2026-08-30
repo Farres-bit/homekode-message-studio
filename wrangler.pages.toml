@@ -1,0 +1,15 @@
+# Binding config for the Pages project (Functions). Apply in the Cloudflare
+# dashboard: Pages → Settings → Functions → D1 bindings → add DB → homekode_studio.
+# Env vars / secrets (Pages → Settings → Environment variables, encrypted):
+#   INTEGRATIONS_MASTER_KEY   32-byte base64 master key for the vault
+#   ACCESS_TEAM_DOMAIN        your-team.cloudflareaccess.com
+#   ACCESS_AUD                the Access application Audience (AUD) tag
+#   SHOPIFY_WEBHOOK_SECRET    (Module 3)
+#   SHOPIFY_SHOP_DOMAIN       (Module 3)
+name = "homekode-message-studio"
+pages_build_output_dir = "public"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "homekode_studio"
+database_id = "e288dead-cf1e-446f-bd07-459a74c86599"

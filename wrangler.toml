@@ -1,0 +1,16 @@
+name = "homekode-store-poller"
+main = "worker/poll-products.js"
+compatibility_date = "2026-08-01"
+
+# Live Website Updates — polls homekode.com/products.json and diffs it.
+[triggers]
+crons = ["*/15 * * * *"]
+
+# Cloudflare D1 — the whole database. No Supabase.
+[[d1_databases]]
+binding = "DB"
+database_name = "homekode_studio"
+database_id = "e288dead-cf1e-446f-bd07-459a74c86599"
+
+# Secrets set with `wrangler secret put`:
+#   INTEGRATIONS_MASTER_KEY, POLL_TRIGGER_KEY
