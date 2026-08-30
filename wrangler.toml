@@ -1,16 +1,11 @@
-name = "homekode-store-poller"
-main = "worker/poll-products.js"
+# Cloudflare Pages configuration (read automatically on every deploy).
+# Declaring the D1 binding here applies it to Pages Functions — no dashboard step.
+name = "homekode-message-studio"
+pages_build_output_dir = "public"
 compatibility_date = "2026-08-01"
 
-# Live Website Updates — polls homekode.com/products.json and diffs it.
-[triggers]
-crons = ["*/15 * * * *"]
-
-# Cloudflare D1 — the whole database. No Supabase.
+# The whole database (Supabase-free). Binds D1 to every Function as env.DB.
 [[d1_databases]]
 binding = "DB"
 database_name = "homekode_studio"
 database_id = "e288dead-cf1e-446f-bd07-459a74c86599"
-
-# Secrets set with `wrangler secret put`:
-#   INTEGRATIONS_MASTER_KEY, POLL_TRIGGER_KEY
